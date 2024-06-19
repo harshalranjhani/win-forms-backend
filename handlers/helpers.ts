@@ -26,7 +26,7 @@ export const getRoot = (req: Request, res: Response) => {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Slidely Forms App</title>
-        <description>View, edit and add data in windows forms!</description>
+        <description>View, edit add, and delete data in windows forms!</description>
         <style>
           body {
             background-color: #121212;
@@ -77,7 +77,7 @@ export const getRoot = (req: Request, res: Response) => {
       <body>
         <h1>Slidely Forms App</h1>
         <div class="video-container">
-          <iframe src="https://drive.google.com/file/d/1hRXGwJhsb85QyGYnRF0gcDPqCYDE_DhF/preview" allow="autoplay"></iframe>
+        <iframe src="https://drive.google.com/file/d/1hRXGwJhsb85QyGYnRF0gcDPqCYDE_DhF/preview" width="640" height="480" allow="autoplay"></iframe>
         </div>
         <div class="button-container">
           <a href="https://www.icloud.com/iclouddrive/0252qjT_lBAp86sDKj21bzeIA#Slidely_Form_App">
