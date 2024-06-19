@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSearchVercel = exports.putEditVercel = exports.deleteVercel = exports.getReadVercel = exports.postSubmitVercel = void 0;
 const send_1 = require("../mails/send");
-const helpers_1 = require("./helpers");
+let submissions = [];
 const postSubmitVercel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, phone, github_link, stopwatch_time } = req.body;
     if (!name || !email || !phone || !github_link || !stopwatch_time) {
@@ -19,7 +19,6 @@ const postSubmitVercel = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     const newSubmission = { name, email, phone, github_link, stopwatch_time };
     // In-memory submissions array
-    const submissions = (0, helpers_1.loadDatabase)().submissions;
     submissions.push(newSubmission);
     yield (0, send_1.sendEmail)(name, email, phone, github_link, stopwatch_time);
     return res.status(201).json({ success: true, data: newSubmission });
@@ -30,7 +29,6 @@ const getReadVercel = (req, res) => {
     if (isNaN(index)) {
         return res.status(400).json({ error: "Invalid index" });
     }
-    const submissions = (0, helpers_1.loadDatabase)().submissions;
     if (index < 0 || index >= submissions.length) {
         return res.status(404).json({ error: "Submission not found" });
     }
@@ -42,12 +40,10 @@ const deleteVercel = (req, res) => {
     if (isNaN(index)) {
         return res.status(400).json({ error: "Invalid index" });
     }
-    const submissions = (0, helpers_1.loadDatabase)().submissions;
     if (index < 0 || index >= submissions.length) {
         return res.status(404).json({ error: "Submission not found" });
     }
     submissions.splice(index, 1);
-    (0, helpers_1.saveDatabase)({ submissions });
     return res.status(200).json({ success: true, message: "Submission deleted" });
 };
 exports.deleteVercel = deleteVercel;
@@ -60,12 +56,10 @@ const putEditVercel = (req, res) => {
     if (!name || !email || !phone || !github_link || !stopwatch_time) {
         return res.status(400).json({ error: "All fields are required" });
     }
-    const submissions = (0, helpers_1.loadDatabase)().submissions;
     if (index < 0 || index >= submissions.length) {
         return res.status(404).json({ error: "Submission not found" });
     }
     submissions[index] = { name, email, phone, github_link, stopwatch_time };
-    (0, helpers_1.saveDatabase)({ submissions });
     return res.status(200).json({ success: true, message: "Submission updated" });
 };
 exports.putEditVercel = putEditVercel;
@@ -74,7 +68,6 @@ const getSearchVercel = (req, res) => {
     if (!email) {
         return res.status(400).json({ error: "Email is required" });
     }
-    const submissions = (0, helpers_1.loadDatabase)().submissions;
     const results = submissions.filter((submission) => submission.email === email);
     return res.status(200).json({ success: true, data: results });
 };

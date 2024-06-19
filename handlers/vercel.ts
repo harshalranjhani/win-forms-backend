@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
 import { sendEmail } from "../mails/send";
-import { loadDatabase, saveDatabase } from "./helpers";
+let submissions: any[] = [];
 
 export const postSubmitVercel = async (req: Request, res: Response) => {
   const { name, email, phone, github_link, stopwatch_time } = req.body;
@@ -14,7 +14,6 @@ export const postSubmitVercel = async (req: Request, res: Response) => {
   const newSubmission = { name, email, phone, github_link, stopwatch_time };
 
   // In-memory submissions array
-  const submissions = loadDatabase().submissions;
   submissions.push(newSubmission);
 
   await sendEmail(name, email, phone, github_link, stopwatch_time);
@@ -28,8 +27,6 @@ export const getReadVercel = (req: Request, res: Response) => {
   if (isNaN(index)) {
     return res.status(400).json({ error: "Invalid index" });
   }
-
-  const submissions = loadDatabase().submissions;
 
   if (index < 0 || index >= submissions.length) {
     return res.status(404).json({ error: "Submission not found" });
@@ -45,14 +42,11 @@ export const deleteVercel = (req: Request, res: Response) => {
     return res.status(400).json({ error: "Invalid index" });
   }
 
-  const submissions = loadDatabase().submissions;
-
   if (index < 0 || index >= submissions.length) {
     return res.status(404).json({ error: "Submission not found" });
   }
 
   submissions.splice(index, 1);
-  saveDatabase({ submissions });
 
   return res.status(200).json({ success: true, message: "Submission deleted" });
 };
@@ -69,14 +63,11 @@ export const putEditVercel = (req: Request, res: Response) => {
     return res.status(400).json({ error: "All fields are required" });
   }
 
-  const submissions = loadDatabase().submissions;
-
   if (index < 0 || index >= submissions.length) {
     return res.status(404).json({ error: "Submission not found" });
   }
 
   submissions[index] = { name, email, phone, github_link, stopwatch_time };
-  saveDatabase({ submissions });
 
   return res.status(200).json({ success: true, message: "Submission updated" });
 };
@@ -88,7 +79,6 @@ export const getSearchVercel = (req: Request, res: Response) => {
     return res.status(400).json({ error: "Email is required" });
   }
 
-  const submissions = loadDatabase().submissions;
   const results = submissions.filter(
     (submission: any) => submission.email === email
   );
