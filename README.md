@@ -211,6 +211,6 @@ The server will run on http://localhost:8080.
 Differences between Local and Vercel Routes
 Local Routes: When running locally, the base URL is http://localhost:8080. All routes should be accessed using this base URL. For example, http://localhost:8080/ping.
 
-Vercel Routes: When deployed on Vercel, the base URL will be your Vercel project's domain, such as https://winforms.harshalranjhani.in. All routes should be accessed using this base URL. For example, https://winforms.harshalranjhani.in.vercel.app/ping.
+Vercel Routes: When deployed on Vercel, the base URL will be your Vercel project's domain, such as https://winforms.harshalranjhani.in. All routes should be accessed using this base URL. For example, https://winforms.harshalranjhani.in/ping.
 
 Thank you for reading! 🚀
