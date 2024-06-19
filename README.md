@@ -14,8 +14,8 @@ This project is an Express server written in TypeScript with endpoints for handl
 1. Clone the repository:
 
    ```bash
-   git clone <repository_url>
-   cd <repository_name>
+   git clone https://github.com/harshalranjhani/win-forms-backend.git
+   cd win-forms-backend
    ```
 
 2. Install the dependencies:
