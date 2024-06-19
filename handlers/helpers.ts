@@ -37,10 +37,25 @@ export const getRoot = (req: Request, res: Response) => {
             align-items: center;
             height: 100vh;
             margin: 0;
+            padding: 20px;
           }
           h1 {
-            font-size: 2em;
+            font-size: 2.5em;
             margin-bottom: 20px;
+          }
+          .video-container {
+            width: 100%;
+            max-width: 640px;
+            margin-bottom: 20px;
+          }
+          .video-container iframe {
+            width: 100%;
+            height: 360px;
+            border: none;
+            border-radius: 10px;
+          }
+          .button-container {
+            text-align: center;
           }
           button {
             background-color: #1db954;
@@ -51,6 +66,7 @@ export const getRoot = (req: Request, res: Response) => {
             cursor: pointer;
             border-radius: 5px;
             text-decoration: none;
+            transition: background-color 0.3s ease;
           }
           button:hover {
             background-color: #17a445;
@@ -58,10 +74,15 @@ export const getRoot = (req: Request, res: Response) => {
         </style>
       </head>
       <body>
-        <h1>Windows Form Executable Download</h1>
-        <a href="https://www.icloud.com/iclouddrive/0252qjT_lBAp86sDKj21bzeIA#Slidely_Form_App">
-          <button>Download</button>
-        </a>
+        <h1>Slidely Forms App</h1>
+        <div class="video-container">
+          <iframe src="https://drive.google.com/file/d/1hRXGwJhsb85QyGYnRF0gcDPqCYDE_DhF/preview" allow="autoplay"></iframe>
+        </div>
+        <div class="button-container">
+          <a href="https://www.icloud.com/iclouddrive/0252qjT_lBAp86sDKj21bzeIA#Slidely_Form_App">
+            <button>Download Windows Executable</button>
+          </a>
+        </div>
       </body>
     </html>
   `;
