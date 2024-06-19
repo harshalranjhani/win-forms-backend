@@ -26,6 +26,7 @@ export const getRoot = (req: Request, res: Response) => {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Slidely Forms App</title>
+        <description>View, edit and add data in windows forms!</description>
         <style>
           body {
             background-color: #121212;
