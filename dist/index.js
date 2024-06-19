@@ -180,7 +180,7 @@ app.get("/search", (req, res) => {
     return res.status(200).json({ success: true, data: results });
 });
 // Start the server locally
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
 });
