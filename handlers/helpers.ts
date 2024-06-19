@@ -59,7 +59,7 @@ export const getRoot = (req: Request, res: Response) => {
       </head>
       <body>
         <h1>Windows Form Executable Download</h1>
-        <a href="https://www.icloud.com/iclouddrive/0f6PaEvPoGmgP4zOqxvEzYGDA#Slidely_Form_App">
+        <a href="https://www.icloud.com/iclouddrive/0252qjT_lBAp86sDKj21bzeIA#Slidely_Form_App">
           <button>Download</button>
         </a>
       </body>
