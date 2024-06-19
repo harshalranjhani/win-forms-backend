@@ -82,7 +82,7 @@ The server will run on http://localhost:8080.
 - An email with all the form responses will be sent to the email address provided in the form.
 - Request and Response are the same as `/submit`.
 
-4. **GET /read**
+4. **GET `/read`**
 
 - Description: Retrieves a form submission based on the index provided as a query parameter.
 - Query Parameter: index (0-indexed)
@@ -107,13 +107,13 @@ The server will run on http://localhost:8080.
     }
     ```
 
-5. **GET /read-vercel**
+5. **GET `/read-vercel`**
 
 - Description: Retrieves a form submission based on the index provided as a query parameter.
 - Query Parameter: index (0-indexed)
 - Response is the same as `/read`.
 
-6. **PUT /edit/:index**
+6. **PUT `/edit/:index`**
 
 - Description: Edits a form submission based on the index provided as a route parameter.
 - Route Parameter: index (0-indexed)
@@ -143,7 +143,7 @@ The server will run on http://localhost:8080.
     }
     ```
 
-7. **PUT /edit-vercel/:index**
+7. **PUT `/edit-vercel/:index`**
 
 - Description: Edits a form submission based on the index provided as a route parameter.
 - Route Parameter: index (0-indexed)
@@ -174,7 +174,7 @@ The server will run on http://localhost:8080.
 - Route Parameter: index (0-indexed)
 - Response is the same as `/delete/:index`.
 
-10. **GET /search**
+10. **GET `/search`**
 
 - Description: Searches for a form submission based on the email provided as a query parameter.
 - Query Parameter: email
@@ -202,7 +202,7 @@ The server will run on http://localhost:8080.
     }
     ```
 
-11. **GET /search-vercel**
+11. **GET `/search-vercel`**
 
 - Description: Searches for a form submission based on the email provided as a query parameter.
 - Query Parameter: email
