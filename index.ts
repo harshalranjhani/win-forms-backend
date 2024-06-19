@@ -1,9 +1,14 @@
 import express, { Express, Request, Response } from "express";
 import fs from "fs";
 import path from "path";
+
+import { mailTemplate } from "./mails/template";
+import dotenv from "dotenv";
+import { sendEmail } from "./mails/send";
 const app: Express = express();
 
 app.use(express.json());
+dotenv.config();
 
 let submissions: any[] = [];
 
@@ -32,7 +37,7 @@ app.get("/ping", (req: Request, res: Response) => {
   return res.status(200).json({ success: true });
 });
 
-app.post("/submit-vercel", (req: Request, res: Response) => {
+app.post("/submit-vercel", async (req: Request, res: Response) => {
   const { name, email, phone, github_link, stopwatch_time } = req.body;
 
   if (!name || !email || !phone || !github_link || !stopwatch_time) {
@@ -48,6 +53,7 @@ app.post("/submit-vercel", (req: Request, res: Response) => {
   };
 
   submissions.push(newSubmission);
+  await sendEmail(name, email, phone, github_link, stopwatch_time);
 
   return res.status(201).json({ success: true, data: newSubmission });
 });
@@ -110,13 +116,15 @@ app.get("/search-vercel", (req: Request, res: Response) => {
     return res.status(400).json({ error: "Email is required" });
   }
 
-  const results = submissions.filter((submission: any) => submission.email === email);
+  const results = submissions.filter(
+    (submission: any) => submission.email === email
+  );
 
   return res.status(200).json({ success: true, data: results });
 });
 
 // Local routes with file system operations
-app.post("/submit", (req: Request, res: Response) => {
+app.post("/submit", async (req: Request, res: Response) => {
   const { name, email, phone, github_link, stopwatch_time } = req.body;
 
   if (!name || !email || !phone || !github_link || !stopwatch_time) {
@@ -135,6 +143,8 @@ app.post("/submit", (req: Request, res: Response) => {
   database.submissions.push(newSubmission);
   saveDatabase(database);
 
+  await sendEmail(name, email, phone, github_link, stopwatch_time);
+
   return res.status(201).json({ success: true, data: newSubmission });
 });
 
@@ -151,7 +161,9 @@ app.get("/read", (req: Request, res: Response) => {
     return res.status(404).json({ error: "Submission not found" });
   }
 
-  return res.status(200).json({ success: true, data: database.submissions[index] });
+  return res
+    .status(200)
+    .json({ success: true, data: database.submissions[index] });
 });
 
 app.delete("/delete/:index", (req: Request, res: Response) => {
@@ -191,7 +203,13 @@ app.put("/edit/:index", (req: Request, res: Response) => {
     return res.status(404).json({ error: "Submission not found" });
   }
 
-  database.submissions[index] = { name, email, phone, github_link, stopwatch_time };
+  database.submissions[index] = {
+    name,
+    email,
+    phone,
+    github_link,
+    stopwatch_time,
+  };
   saveDatabase(database);
 
   return res.status(200).json({ success: true, message: "Submission updated" });
@@ -205,13 +223,15 @@ app.get("/search", (req: Request, res: Response) => {
   }
 
   const database = loadDatabase();
-  const results = database.submissions.filter((submission: any) => submission.email === email);
+  const results = database.submissions.filter(
+    (submission: any) => submission.email === email
+  );
 
   return res.status(200).json({ success: true, data: results });
 });
 
 // Start the server locally
-const port = process.env.PORT || 8080;
+const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });

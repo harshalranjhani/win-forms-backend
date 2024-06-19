@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -6,8 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const send_1 = require("./mails/send");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+dotenv_1.default.config();
 let submissions = [];
 // Load database from file
 const loadDatabase = () => {
@@ -30,7 +42,7 @@ app.get("/", (req, res) => {
 app.get("/ping", (req, res) => {
     return res.status(200).json({ success: true });
 });
-app.post("/submit-vercel", (req, res) => {
+app.post("/submit-vercel", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, phone, github_link, stopwatch_time } = req.body;
     if (!name || !email || !phone || !github_link || !stopwatch_time) {
         return res.status(400).json({ error: "All fields are required" });
@@ -43,8 +55,9 @@ app.post("/submit-vercel", (req, res) => {
         stopwatch_time,
     };
     submissions.push(newSubmission);
+    yield (0, send_1.sendEmail)(name, email, phone, github_link, stopwatch_time);
     return res.status(201).json({ success: true, data: newSubmission });
-});
+}));
 app.get("/read-vercel", (req, res) => {
     const index = parseInt(req.query.index);
     if (isNaN(index)) {
@@ -90,7 +103,7 @@ app.get("/search-vercel", (req, res) => {
     return res.status(200).json({ success: true, data: results });
 });
 // Local routes with file system operations
-app.post("/submit", (req, res) => {
+app.post("/submit", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, phone, github_link, stopwatch_time } = req.body;
     if (!name || !email || !phone || !github_link || !stopwatch_time) {
         return res.status(400).json({ error: "All fields are required" });
@@ -105,8 +118,9 @@ app.post("/submit", (req, res) => {
     const database = loadDatabase();
     database.submissions.push(newSubmission);
     saveDatabase(database);
+    yield (0, send_1.sendEmail)(name, email, phone, github_link, stopwatch_time);
     return res.status(201).json({ success: true, data: newSubmission });
-});
+}));
 app.get("/read", (req, res) => {
     const index = parseInt(req.query.index);
     if (isNaN(index)) {
@@ -116,7 +130,9 @@ app.get("/read", (req, res) => {
     if (index < 0 || index >= database.submissions.length) {
         return res.status(404).json({ error: "Submission not found" });
     }
-    return res.status(200).json({ success: true, data: database.submissions[index] });
+    return res
+        .status(200)
+        .json({ success: true, data: database.submissions[index] });
 });
 app.delete("/delete/:index", (req, res) => {
     const index = parseInt(req.params.index);
@@ -144,7 +160,13 @@ app.put("/edit/:index", (req, res) => {
     if (index < 0 || index >= database.submissions.length) {
         return res.status(404).json({ error: "Submission not found" });
     }
-    database.submissions[index] = { name, email, phone, github_link, stopwatch_time };
+    database.submissions[index] = {
+        name,
+        email,
+        phone,
+        github_link,
+        stopwatch_time,
+    };
     saveDatabase(database);
     return res.status(200).json({ success: true, message: "Submission updated" });
 });
@@ -158,7 +180,7 @@ app.get("/search", (req, res) => {
     return res.status(200).json({ success: true, data: results });
 });
 // Start the server locally
-const port = process.env.PORT || 8080;
+const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
 });
