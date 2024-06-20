@@ -28,9 +28,9 @@ This project is an Express server written in TypeScript with endpoints for handl
 
 Start the server:
 
-   ```
-      node index.ts
-   ```
+```
+   node index.ts
+```
 
 The server will run on http://localhost:8080.
 
